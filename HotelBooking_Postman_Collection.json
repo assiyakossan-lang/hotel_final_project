@@ -1,0 +1,24 @@
+{
+  "info": { "name": "Hotel Booking API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [ { "key": "baseUrl", "value": "http://localhost:8080" } ],
+  "item": [
+    { "name": "Rooms", "item": [
+      { "name": "GET Rooms", "request": { "method": "GET", "url": "{{baseUrl}}/api/rooms" } },
+      { "name": "POST Room", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "{{baseUrl}}/api/rooms", "body": { "mode":"raw", "raw":"{\n  \"roomNumber\": \"401\",\n  \"type\": \"DELUXE\",\n  \"capacity\": 2,\n  \"pricePerNight\": 28000,\n  \"description\": \"New deluxe room\",\n  \"available\": true\n}" } } },
+      { "name": "DELETE Room", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/rooms/1" } }
+    ]},
+    { "name": "Users", "item": [
+      { "name": "GET Users", "request": { "method": "GET", "url": "{{baseUrl}}/api/users" } },
+      { "name": "POST User", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "{{baseUrl}}/api/users", "body": { "mode":"raw", "raw":"{\n  \"name\": \"Test User\",\n  \"email\": \"test@mail.com\",\n  \"phone\": \"+77001112233\",\n  \"password\": \"123456\",\n  \"role\": \"USER\"\n}" } } }
+    ]},
+    { "name": "Bookings", "item": [
+      { "name": "GET Bookings", "request": { "method": "GET", "url": "{{baseUrl}}/api/bookings" } },
+      { "name": "POST Booking", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "{{baseUrl}}/api/bookings", "body": { "mode":"raw", "raw":"{\n  \"userId\": 1,\n  \"roomId\": 1,\n  \"checkInDate\": \"2026-06-01\",\n  \"checkOutDate\": \"2026-06-03\"\n}" } } }
+    ]},
+    { "name": "Reviews", "item": [
+      { "name": "GET Reviews", "request": { "method": "GET", "url": "{{baseUrl}}/api/reviews" } },
+      { "name": "POST Review", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "{{baseUrl}}/api/reviews", "body": { "mode":"raw", "raw":"{\n  \"userId\": 1,\n  \"rating\": 5,\n  \"comment\": \"Excellent service\"\n}" } } },
+      { "name": "DELETE Review", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/reviews/1" } }
+    ]}
+  ]
+}
