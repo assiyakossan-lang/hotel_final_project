@@ -1,0 +1,9 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Rooms</title><link rel="stylesheet" href="/style.css"></head><body>
+<header class="navbar"><a class="brand" href="/index.html">Hotel Booking</a><nav id="navlinks" class="navlinks"></nav></header>
+<main class="container"><div class="section-title"><h1>Rooms</h1><a class="btn secondary" href="/index.html">Back to menu</a></div><div id="message"></div><div id="rooms" class="grid"></div></main>
+<footer class="footer"><p><strong>Hotel Booking</strong> — бронируйте комфортные номера по выгодной цене.</p><p>Есть вопросы? Напишите в поддержку: <a href="mailto:support@hotelbooking.kz">support@hotelbooking.kz</a>. Мы ответим и поможем с бронированием.</p></footer><script src="/app.js"></script><script>
+let me={authenticated:false};
+async function loadRooms(){me=await currentUser();const data=await api('/api/public/rooms');const box=document.getElementById('rooms');box.innerHTML='';data.forEach(r=>{box.innerHTML+=`<div class="card"><h3>Room ${r.roomNumber}</h3><p class="muted">${r.type} · ${r.capacity} guests</p><p>${r.description||''}</p><h3>${money(r.pricePerNight)}</h3>${me.authenticated?`<button class="btn" onclick="bookRoom(${r.id})">Book room</button>`:`<a class="btn" href="/login.html">Login to book</a>`}</div>`})}
+async function bookRoom(roomId){const today=new Date();const checkIn=new Date(today.getTime()+86400000);const checkOut=new Date(today.getTime()+86400000*3);const body={roomId,checkInDate:checkIn.toISOString().slice(0,10),checkOutDate:checkOut.toISOString().slice(0,10)};try{await api('/api/public/me/bookings',{method:'POST',body:JSON.stringify(body)});msg('message','Booking created successfully','success-msg')}catch(e){msg('message',e.message,'error')}}
+loadRooms();
+</script></body></html>
