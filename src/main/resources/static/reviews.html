@@ -1,0 +1,15 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Reviews</title><link rel="stylesheet" href="/style.css"></head><body>
+<header class="navbar"><a class="brand" href="/index.html">Hotel Booking</a><nav id="navlinks" class="navlinks"></nav></header>
+<main class="container">
+  <div class="section-title"><h1>Client Reviews</h1><a class="btn secondary" href="/index.html">Back to menu</a></div><div id="message"></div>
+  <section class="card" id="reviewCreateBox" style="display:none"><h2>Leave a review</h2><form id="reviewForm" class="form"><label>Rating</label><select id="rating"><option value="5">5 / 5</option><option value="4">4 / 5</option><option value="3">3 / 5</option><option value="2">2 / 5</option><option value="1">1 / 5</option></select><label>Comment</label><textarea id="comment" required placeholder="Write your opinion about our hotel"></textarea><button class="btn" type="submit">Send review</button></form></section>
+  <section class="grid" id="reviews"></section>
+</main>
+<footer class="footer"><p><strong>Hotel Booking</strong> — бронируйте комфортные номера по выгодной цене.</p><p>Есть вопросы? Напишите в поддержку: <a href="mailto:support@hotelbooking.kz">support@hotelbooking.kz</a>. Мы ответим и поможем с бронированием.</p></footer><script src="/app.js"></script><script>
+let me={authenticated:false};
+function stars(n){return '★'.repeat(n)+'☆'.repeat(5-n)}
+async function loadReviews(){me=await currentUser();if(me.authenticated){reviewCreateBox.style.display='block'}const data=await api('/api/public/reviews');reviews.innerHTML=data.map(r=>`<div class="card"><h3>${escapeHtml(r.userName)}</h3><p class="stars">${stars(r.rating)}</p><p>${escapeHtml(r.comment)}</p>${me.authenticated&&me.id===r.userId?`<button class="btn small danger" onclick="deleteMyReview(${r.id})">Delete my review</button>`:''}</div>`).join('')}
+reviewForm?.addEventListener('submit',async e=>{e.preventDefault();try{await api('/api/public/me/reviews',{method:'POST',body:JSON.stringify({rating:+rating.value,comment:comment.value})});reviewForm.reset();await loadReviews();msg('message','Review added','success-msg')}catch(err){msg('message',err.message,'error')}});
+async function deleteMyReview(id){if(!confirm('Delete review?'))return;try{await api('/api/public/me/reviews/'+id,{method:'DELETE'});await loadReviews()}catch(e){msg('message',e.message,'error')}}
+loadReviews();
+</script></body></html>

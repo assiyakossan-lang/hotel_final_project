@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="navbar">
+  <a class="brand" href="/index.html">Hotel Booking</a>
+  <nav id="navlinks" class="navlinks"></nav>
+</header>
+
+<main class="container auth-page">
+  <h1>Create account</h1>
+  <p class="muted">Already have an account? <a href="/login.html">Login here</a>.</p>
+
+  <form class="form" id="registerForm">
+    <label for="regName">Name</label>
+    <input id="regName" name="name" autocomplete="name" required>
+
+    <label for="regEmail">Email</label>
+    <input id="regEmail" name="email" type="email" autocomplete="email" required>
+
+    <label for="regPhone">Phone</label>
+    <input id="regPhone" name="phone" autocomplete="tel" required>
+
+    <label for="regPassword">Password</label>
+    <input id="regPassword" name="password" type="password" autocomplete="new-password" required minlength="4">
+
+    <label for="regRole">Role</label>
+    <select id="regRole" name="role" required>
+      <option value="USER">User</option>
+      <option value="ADMIN">Admin</option>
+    </select>
+
+    <button class="btn" type="submit">Create account</button>
+    <a class="btn secondary" href="/index.html">Back to menu</a>
+    <div id="message"></div>
+  </form>
+</main>
+<footer class="footer"><p><strong>Hotel Booking</strong> — бронируйте комфортные номера по выгодной цене.</p><p>Есть вопросы? Напишите в поддержку: <a href="mailto:support@hotelbooking.kz">support@hotelbooking.kz</a>. Мы ответим и поможем с бронированием.</p></footer>
+
+<script src="/app.js"></script>
+<script>
+byId('registerForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const body = {
+    name: byId('regName').value.trim(),
+    email: byId('regEmail').value.trim(),
+    phone: byId('regPhone').value.trim(),
+    password: byId('regPassword').value,
+    role: byId('regRole').value
+  };
+
+  try {
+    await api('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(body)
+    });
+    location.href = '/rooms.html';
+  } catch (error) {
+    msg('message', error.message, 'error');
+  }
+});
+</script>
+</body>
+</html>

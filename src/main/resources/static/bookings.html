@@ -1,0 +1,8 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>My Bookings</title><link rel="stylesheet" href="/style.css"></head><body>
+<header class="navbar"><a class="brand" href="/index.html">Hotel Booking</a><nav id="navlinks" class="navlinks"></nav></header>
+<main class="container"><div class="section-title"><h1>My Bookings</h1><a class="btn secondary" href="/index.html">Back to menu</a></div><div id="message"></div><table><thead><tr><th>ID</th><th>Room</th><th>Check in</th><th>Check out</th><th>Total</th><th>Status</th><th>Action</th></tr></thead><tbody id="rows"></tbody></table></main>
+<footer class="footer"><p><strong>Hotel Booking</strong> — бронируйте комфортные номера по выгодной цене.</p><p>Есть вопросы? Напишите в поддержку: <a href="mailto:support@hotelbooking.kz">support@hotelbooking.kz</a>. Мы ответим и поможем с бронированием.</p></footer><script src="/app.js"></script><script>
+async function load(){try{const me=await currentUser();if(!me.authenticated){location.href='/login.html';return}const data=await api('/api/public/me/bookings');rows.innerHTML=data.map(b=>`<tr><td>${b.id}</td><td>${b.roomNumber}</td><td>${b.checkInDate}</td><td>${b.checkOutDate}</td><td>${money(b.totalPrice)}</td><td>${b.status}</td><td>${b.status==='CONFIRMED'?`<button class="btn small danger" onclick="cancelBooking(${b.id})">Cancel</button>`:''}</td></tr>`).join('')}catch(e){msg('message',e.message,'error')}}
+async function cancelBooking(id){try{await api('/api/public/me/bookings/'+id+'/cancel',{method:'PATCH'});load()}catch(e){msg('message',e.message,'error')}}
+load();
+</script></body></html>
